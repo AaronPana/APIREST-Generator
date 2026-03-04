@@ -2,7 +2,8 @@ import { input } from '@inquirer/prompts';
 
 export async function askResources(): Promise<string[]> {
   const resourcesInput = await input({
-    message: 'Recursos iniciales (separados por coma). Ej: users, products, orders:',
+    message:
+      'Recursos iniciales en inglés y singular (separados por coma). Ej: user, product, order:',
     validate: (value) => {
       if (!value || value.trim().length === 0) return 'Ingrese al menos un recurso';
 

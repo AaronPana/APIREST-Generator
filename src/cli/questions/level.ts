@@ -5,13 +5,22 @@ export async function askLevel(): Promise<Level> {
   return select<Level>({
     message: 'Nivel de robustez:',
     choices: [
-      { name: 'Basic       — index, router simple', value: 'basic' },
-      { name: 'Standard    — controllers, models, middlewares, logs', value: 'standard' },
+      { name: 'Basic       — index, server, routers', value: 'basic' },
       {
-        name: 'Pro         — services, repositories, config por env, manejo de errores',
-        value: 'pro',
+        name: 'Standard    — controllers, models, middlewares, errors',
+        value: 'standard',
+        disabled: '      (coming soon)',
       },
-      { name: 'Enterprise  — auth JWT', value: 'enterprise' },
+      {
+        name: 'Advanced    — services, repositories, config por env, logs',
+        value: 'advanced',
+        disabled: '  (coming soon)',
+      },
+      {
+        name: 'Complete    — auth JWT, base para roles y permisos',
+        value: 'complete',
+        disabled: '          (coming soon)',
+      },
     ],
   });
 }
