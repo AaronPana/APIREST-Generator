@@ -13,13 +13,18 @@ import { askPort } from './questions/port.js';
 import { askGit } from './questions/git.js';
 import { askDocker } from './questions/docker.js';
 import type { ProjectAnswers } from './types.js';
+import { generate } from '../generator/index.js';
+import path from 'path';
+import { capitalize } from '../utils/format.js';
 
 export async function run(): Promise<void> {
   logger.title('\nREST API Generator\n');
 
-  const name = await askName();
+  const raw = await askName();
+  const projectPath = path.resolve(process.cwd(), path.normalize(raw));
+  const name = path.basename(projectPath);
 
-  const folder = checkProjectFolder(name);
+  const folder = checkProjectFolder(projectPath);
   if (folder.exists) {
     logger.error(`Ya existe una carpeta con ese nombre en: ${folder.path}`);
     process.exit(1);
@@ -35,10 +40,11 @@ export async function run(): Promise<void> {
   const auth = await askAuth(level);
   const port = await askPort();
   const git = await askGit();
-  const docker = await askDocker();
+  // const docker = await askDocker();
 
   const answers: ProjectAnswers = {
     name,
+    projectPath,
     description,
     level,
     language,
@@ -49,9 +55,31 @@ export async function run(): Promise<void> {
     auth,
     port,
     git,
-    docker,
+    docker: false,
   };
 
-  logger.dim('\n— Resumen —');
-  logger.dim(JSON.stringify(answers, null, 2));
+  printSummary(answers);
+
+  await generate(answers);
+}
+
+function printSummary(answers: ProjectAnswers): void {
+  logger.title('\n— Resumen del proyecto —\n');
+  logger.info(`Nombre:        ${answers.name}`);
+  if (answers.description) logger.info(`Descripción:   ${answers.description}`);
+  logger.info(`Lenguaje:      ${capitalize(answers.language)}`);
+  logger.info(`Nivel:         ${capitalize(answers.level)}`);
+  logger.info(`Prettier:      ${answers.prettier ? 'Sí' : 'No'}`);
+  // logger.info(`Base de datos: ${answers.database === 'none' ? 'Ninguna' : capitalize(answers.database)}`);
+  // if (answers.database !== 'none') logger.info(`ORM:           ${answers.orm}`);
+  // logger.info(`Auth:          ${answers.auth === 'none' ? 'Ninguna' : answers.auth.toUpperCase()}`);
+  logger.info('Base de datos: coming soon');
+  logger.info('ORM:           coming soon');
+  logger.info('Auth:          coming soon');
+  logger.info(`Recursos:      ${answers.resources.join(', ')}`);
+  logger.info(`Puerto:        ${answers.port}`);
+  logger.info(`Git:           ${answers.git ? 'Sí' : 'No'}`);
+  // logger.info(`Docker:        ${answers.docker ? 'Sí' : 'No'}`);
+  logger.info('Docker:        coming soon');
+  logger.dim('');
 }
