@@ -1,5 +1,5 @@
 export type Language = 'javascript' | 'typescript';
-export type Level = 'basic' | 'standard' | 'pro' | 'enterprise';
+export type Level = 'basic' | 'standard' | 'advanced' | 'complete';
 export type Database = 'none' | 'sqlite' | 'mongodb' | 'sqlserver';
 export type ORM = 'none' | 'sequelize' | 'mongoose';
 export type Auth = 'none' | 'jwt';
@@ -12,8 +12,8 @@ export type Auth = 'none' | 'jwt';
 // export enum Level {
 //   BASIC = 'basic',
 //   STANDARD = 'standard',
-//   PRO = 'pro',
-//   ENTERPRISE = 'enterprise',
+//   ADVANCED = 'advanced',
+//   COMPLETE = 'complete',
 // }
 
 // export enum Database {
@@ -36,6 +36,7 @@ export type Auth = 'none' | 'jwt';
 
 export interface ProjectAnswers {
   name: string;
+  projectPath: string;
   description: string;
   level: Level;
   language: Language;
