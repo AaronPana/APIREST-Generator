@@ -1,0 +1,30 @@
+import { Router, Request, Response } from 'express';
+
+const router = Router();
+
+// GET /api/{{plural}}
+router.get('/', (_req: Request, res: Response) => {
+  res.status(200).json({ success: true, data: [] });
+});
+
+// GET /api/{{plural}}/:id
+router.get('/:id', (req: Request, res: Response) => {
+  res.status(200).json({ success: true, data: { id: req.params.id } });
+});
+
+// POST /api/{{plural}}
+router.post('/', (req: Request, res: Response) => {
+  res.status(201).json({ success: true, data: req.body });
+});
+
+// PUT /api/{{plural}}/:id
+router.put('/:id', (req: Request, res: Response) => {
+  res.status(200).json({ success: true, data: { id: req.params.id, ...req.body } });
+});
+
+// DELETE /api/{{plural}}/:id
+router.delete('/:id', (req: Request, res: Response) => {
+  res.status(200).json({ success: true, data: { id: req.params.id } });
+});
+
+export const {{pascalCase}}Router = router;

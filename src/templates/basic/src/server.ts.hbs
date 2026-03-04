@@ -1,0 +1,52 @@
+import express, { Application, Request, Response } from 'express';
+import cors from 'cors';
+{{#each resources}}
+import { {{pascalCase}}Router } from './routes/{{singular}}.router.js';
+{{/each}}
+
+export class Server {
+  private PORT = process.env.PORT || {{port}};
+  private app: Application;
+
+  constructor() {
+    this.app = express();
+    this.middlewares();
+    this.routes();
+    this.start();
+  }
+
+  private middlewares(): void {
+    this.app.use(cors());
+    this.app.use(express.json());
+  }
+
+  private routes(): void {
+    this.app.get('/api/ping', (_req: Request, res: Response) => {
+      res.status(200).json({ success: true, message: 'pong' });
+    });
+
+    {{#each resources}}
+    this.app.use('/api/{{plural}}', {{pascalCase}}Router);
+    {{/each}}
+
+    this.app.use('*', (_req: Request, res: Response) => {
+      res.status(404).json({ success: false, message: 'Route not found' });
+    });
+  }
+
+  private start(): void {
+    this.app.listen(this.PORT, () => {
+      console.log(`Server running on port ${this.PORT}`);
+      console.log(`http://localhost:${this.PORT}/api/ping`);
+    });
+  }
+
+  status() {
+    return {
+      status: 'OK',
+      version: '{{version}}',
+      environment: process.env.NODE_ENV || 'development',
+      port: this.PORT,
+    };
+  }
+}
