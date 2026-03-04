@@ -1,29 +1,25 @@
 import { existsSync, realpathSync } from 'fs';
-import { resolve } from 'path';
+import { resolve, basename, normalize } from 'path';
 
-export function validateProjectName(name: string): true | string {
+export function validateProjectPath(input: string): true | string {
   // true | string para Inquirer
-  if (!name || name.trim().length === 0) {
+  if (!input || input.trim().length === 0) {
     return 'El nombre del proyecto no puede estar vacío';
   }
 
-  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(name)) {
-    return 'Solo minúsculas, números y guiones. Sin espacios ni caracteres especiales. Ej: my-api';
-  }
+  const normalized = normalize(input);
+  const name = basename(normalized);
 
-  if (name.length > 214) {
-    return 'El nombre no puede superar los 214 caracteres';
+  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(name)) {
+    return 'Solo minúsculas, números y guiones. Sin espacios ni caracteres especiales. Ej: my-api, ../projects/my-api';
   }
 
   return true;
 }
 
-export function checkProjectFolder(name: string): { exists: boolean; path: string } {
-  const targetPath = resolve(process.cwd(), name);
-
-  if (existsSync(targetPath)) {
-    return { exists: true, path: realpathSync(targetPath) };
+export function checkProjectFolder(projectPath: string): { exists: boolean; path: string } {
+  if (existsSync(projectPath)) {
+    return { exists: true, path: realpathSync(projectPath) };
   }
-
-  return { exists: false, path: targetPath };
+  return { exists: false, path: projectPath };
 }
