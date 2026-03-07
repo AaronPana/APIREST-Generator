@@ -4,27 +4,57 @@ const router = Router();
 
 // GET /api/{{plural}}
 router.get('/', (_req, res) => {
-  res.status(200).json({ success: true, data: [] });
+  try {
+    res.status(200).json({ success: true, data: [] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 });
 
 // GET /api/{{plural}}/:id
 router.get('/:id', (req, res) => {
-  res.status(200).json({ success: true, data: { id: req.params.id } });
+  try {
+    const { id } = req.params;
+    res.status(200).json({ success: true, data: { id } });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 });
 
 // POST /api/{{plural}}
 router.post('/', (req, res) => {
-  res.status(201).json({ success: true, data: req.body });
+  try {
+    const body = req.body;
+    res.status(201).json({ success: true, data: body });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 });
 
 // PUT /api/{{plural}}/:id
 router.put('/:id', (req, res) => {
-  res.status(200).json({ success: true, data: { id: req.params.id, ...req.body } });
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    res.status(200).json({ success: true, data: { id, ...body } });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 });
 
 // DELETE /api/{{plural}}/:id
 router.delete('/:id', (req, res) => {
-  res.status(200).json({ success: true, data: { id: req.params.id } });
+  try {
+    const { id } = req.params;
+    res.status(200).json({ success: true, data: { id } });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 });
 
 export const {{pascalCase}}Router = router;

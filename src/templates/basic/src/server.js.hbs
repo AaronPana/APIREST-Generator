@@ -5,7 +5,7 @@ import { {{pascalCase}}Router } from './routes/{{singular}}.router.js';
 {{/each}}
 
 export class Server {
-  PORT = process.env.PORT || {{port}};
+  PORT = Number(process.env.PORT) || {{port}};
   app;
 
   constructor() {
@@ -25,6 +25,10 @@ export class Server {
       res.status(200).json({ success: true, message: 'pong' });
     });
 
+    this.app.get('/api/status', (_req, res) => {
+      res.status(200).json({ success: true, data: this.status() });
+    });
+
     {{#each resources}}
     this.app.use('/api/{{plural}}', {{pascalCase}}Router);
     {{/each}}
@@ -36,7 +40,7 @@ export class Server {
 
   start() {
     this.app.listen(this.PORT, () => {
-      console.log(`Server running on port ${this.PORT}`);
+      console.log(`\nServer running on port ${this.PORT}`);
       console.log(`http://localhost:${this.PORT}/api/ping`);
     });
   }
