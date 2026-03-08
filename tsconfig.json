@@ -1,19 +1,110 @@
 {
   "compilerOptions": {
+    /* ── LANGUAGE & TARGET ──────────────────────────────────────────────── */
+
     "target": "ES2022",
+    // Versión de JavaScript a la que compila.
+    // ES2022 es ideal para Node 20+ — soporta clases privadas, top-level await, etc.
+    // Opciones: ES2016, ES2018, ES2020, ES2022, ESNext
+
+    /* ── MODULES ────────────────────────────────────────────────────────── */
+
     "module": "NodeNext",
+    // Sistema de módulos. NodeNext habilita ESM (import/export) en Node.
+    // Necesario si usás "type": "module" en package.json.
+
     "moduleResolution": "NodeNext",
-    "rootDir": "src",
-    "outDir": "dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    // Cómo TypeScript resuelve los imports.
+    // NodeNext es obligatorio cuando module es NodeNext.
+    // Requiere extensiones explícitas en los imports (.js).
+
     "resolveJsonModule": true,
+    // Permite importar archivos .json directamente.
+    // import data from './data.json' — útil para configs o fixtures.
+
+    /* ── INPUT / OUTPUT ─────────────────────────────────────────────────── */
+
+    "rootDir": "src",
+    // Carpeta raíz del código fuente.
+    // TypeScript solo compila archivos dentro de esta carpeta.
+
+    "outDir": "dist",
+    // Carpeta donde se guarda el código compilado.
+    // El contenido de src/ se refleja en dist/.
+
+    /* ── DECLARATION FILES ──────────────────────────────────────────────── */
+
     "declaration": true,
+    // Genera archivos .d.ts junto al código compilado.
+    // Necesario si publicás el paquete en npm para que otros proyectos tengan tipos.
+
     "declarationMap": true,
-    "sourceMap": true
+    // Genera sourcemaps para los .d.ts.
+    // Permite que editores como VS Code naveguen al código fuente original desde los tipos.
+
+    "sourceMap": true,
+    // Genera sourcemaps (.js.map) para el código compilado.
+    // Permite que debuggers y stack traces apunten al .ts original en lugar del .js compilado.
+
+    /* ── STRICT TYPE CHECKING ───────────────────────────────────────────── */
+
+    "strict": true,
+    // Activa TODAS las opciones estrictas de TypeScript de una vez.
+    // Incluye: noImplicitAny, strictNullChecks, strictFunctionTypes, etc.
+    // Recomendado siempre — detecta muchos errores en tiempo de compilación.
+
+    "noUnusedLocals": true,
+    // Error si declarás una variable local y no la usás.
+    // Útil para mantener el código limpio. Puede ser molesto al principio.
+    // Desactivar si querés menos restricciones durante desarrollo.
+
+    "noUnusedParameters": true,
+    // Error si declarás un parámetro de función y no lo usás.
+    // Convención: prefijá con _ los que ignorás a propósito (_req, _next).
+    // Desactivar si querés menos restricciones durante desarrollo.
+
+    // "noImplicitReturns": true,
+    // Error si una función puede retornar sin un return explícito.
+    // Ejemplo: una función que retorna string en un if pero nada en el else.
+    // Recomendado para código más predecible. Comentado porque puede ser verbose.
+
+    // "noFallthroughCasesInSwitch": true,
+    // Error si un case en un switch no tiene break o return.
+    // Evita bugs clásicos de fallthrough accidental. Recomendado activarlo.
+
+    // "noUncheckedIndexedAccess": true,
+    // Agrega undefined al tipo cuando accedés a un array por índice.
+    // arr[0] pasa a ser string | undefined en lugar de string.
+    // Muy estricto — puede romper mucho código existente. No recomendado para empezar.
+
+    // "exactOptionalPropertyTypes": true,
+    // Diferencia entre una propiedad opcional ausente y una con valor undefined.
+    // { name?: string } no acepta { name: undefined } con esta opción.
+    // Muy estricto — no recomendado a menos que necesites esa precisión.
+
+    /* ── INTEROP ────────────────────────────────────────────────────────── */
+
+    "esModuleInterop": true,
+    // Permite importar módulos CommonJS con sintaxis de default import.
+    // import express from 'express' en lugar de import * as express from 'express'.
+    // Necesario para la mayoría de las librerías de npm.
+
+    "forceConsistentCasingInFileNames": true,
+    // Error si importás un archivo con casing diferente al nombre real.
+    // import './Utils' cuando el archivo se llama 'utils.ts' daría error.
+    // Evita bugs en sistemas de archivos case-insensitive (Windows/Mac).
+
+    /* ── PERFORMANCE ────────────────────────────────────────────────────── */
+
+    "skipLibCheck": true
+    // Omite el chequeo de tipos en archivos .d.ts de node_modules.
+    // Mejora mucho la velocidad de compilación.
+    // Sin esto TypeScript chequea todos los tipos de todas las librerías instaladas.
   },
+
   "include": ["src/**/*"],
+  // Solo compila archivos dentro de src/.
+
   "exclude": ["node_modules", "dist"]
+  // Ignora estas carpetas al compilar.
 }
