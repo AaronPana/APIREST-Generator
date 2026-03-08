@@ -21,7 +21,7 @@ export function resolveDeps(answers: {
   );
 }
 
-interface DepsBlock {
+export interface DepsBlock {
   dependencies: Record<string, string>;
   devDependencies: Record<string, string>;
 }
@@ -42,8 +42,11 @@ export const levelDeps: Record<string, DepsBlock> = {
   standard: {
     dependencies: {
       zod: '^3.23.0',
+      'fs-extra': '^11.2.0',
     },
-    devDependencies: {},
+    devDependencies: {
+      '@types/fs-extra': '^11.0.4',
+    },
   },
   advanced: {
     dependencies: {

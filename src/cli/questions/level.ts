@@ -7,9 +7,8 @@ export async function askLevel(): Promise<Level> {
     choices: [
       { name: 'Basic       — index, server, routers', value: 'basic' },
       {
-        name: 'Standard    — controllers, models, middlewares, errors',
+        name: 'Standard    — controllers, models, stores, middlewares, errors',
         value: 'standard',
-        disabled: '      (coming soon)',
       },
       {
         name: 'Advanced    — services, repositories, config por env, logs',
