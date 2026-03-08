@@ -1,0 +1,83 @@
+import express from 'express';
+{{#each resources}}
+import { {{pascalCase}}Router } from './routes/{{singular}}.router.js';
+{{/each}}
+import { corsMiddleware } from './middlewares/cors.js';
+import { loggerMiddleware } from './middlewares/logger.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { config } from './configs/app.config.js';
+{{#if (ne database "none")}}
+import { connectDatabase } from './database/connection.js';
+{{/if}}
+
+export class Server {
+  PORT = config.port;
+  app;
+
+  constructor() {
+    this.app = express();
+    this.middlewares();
+    this.routes();
+    this.errorHandler();
+    this.start();
+  }
+
+  middlewares() {
+    this.app.use(corsMiddleware);
+    this.app.use(loggerMiddleware);
+    this.app.use(express.json());
+  }
+
+  routes() {
+    this.app.get('/api/ping', (_req, res) => {
+      res.status(200).json({ success: true, message: 'pong' });
+    });
+
+    this.app.get('/api/status', (_req, res) => {
+      res.status(200).json({ success: true, data: this.status() });
+    });
+
+    {{#each resources}}
+    this.app.use('/api/{{plural}}', {{pascalCase}}Router);
+    {{/each}}
+
+    this.app.use('*', (_req, res) => {
+      res.status(404).json({ success: false, message: 'Route not found' });
+    });
+  }
+
+  errorHandler() {
+    this.app.use(errorHandler);
+  }
+
+  {{#if (ne database "none")}}
+  async connectDB() {
+    await connectDatabase();
+  }
+  {{/if}}
+
+  start() {
+    {{#if (ne database "none")}}
+    this.connectDB().then(() => {
+      this.app.listen(this.PORT, () => {
+        console.log(`\nServer running on port ${this.PORT}`);
+        console.log(`http://localhost:${this.PORT}/api/ping`);
+      });
+    });
+    {{else}}
+    this.app.listen(this.PORT, () => {
+      console.log(`\nServer running on port ${this.PORT}`);
+      console.log(`http://localhost:${this.PORT}/api/ping`);
+    });
+    {{/if}}
+  }
+
+  status() {
+    return {
+      status: 'OK',
+      version: '{{version}}',
+      environment: config.env,
+      port: this.PORT,
+    };
+  }
+}

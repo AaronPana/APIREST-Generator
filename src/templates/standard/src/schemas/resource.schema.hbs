@@ -1,0 +1,14 @@
+import { z } from 'zod';
+
+export const create{{pascalCase}}Schema = z.object({
+  // define your fields here, for example:
+  // name: z.string().min(1),
+  // email: z.string().email(),
+});
+
+export const update{{pascalCase}}Schema = create{{pascalCase}}Schema.partial();
+
+{{#if (eq language "typescript")}}
+export type Create{{pascalCase}}Dto = z.infer<typeof create{{pascalCase}}Schema>;
+export type Update{{pascalCase}}Dto = z.infer<typeof update{{pascalCase}}Schema>;
+{{/if}}

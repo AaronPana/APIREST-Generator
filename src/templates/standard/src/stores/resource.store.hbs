@@ -1,0 +1,60 @@
+import fs from 'fs-extra';
+import path from 'path';
+import { fileURLToPath } from 'url';
+{{#if (eq language "typescript")}}
+import type { {{pascalCase}}Model } from '../models/{{singular}}.model.js';
+import type { Create{{pascalCase}}Dto, Update{{pascalCase}}Dto } from '../schemas/{{singular}}.schema.js';
+{{/if}}
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const FILE = path.resolve(__dirname, '../../data/{{plural}}.json');
+
+export class {{pascalCase}}Store {
+  {{#if (eq language "typescript")}}private {{/if}}async readAll(){{#if (eq language "typescript")}}: Promise<{{pascalCase}}Model[]>{{/if}} {
+    await fs.ensureFile(FILE);
+    const raw = await fs.readFile(FILE, 'utf-8');
+    return raw.trim() ? JSON.parse(raw) : [];
+  }
+
+  {{#if (eq language "typescript")}}private {{/if}}async writeAll(data{{#if (eq language "typescript")}}: {{pascalCase}}Model[]{{/if}}){{#if (eq language "typescript")}}: Promise<void>{{/if}} {
+    await fs.writeFile(FILE, JSON.stringify(data, null, 2));
+  }
+
+  async getAll(){{#if (eq language "typescript")}}: Promise<{{pascalCase}}Model[]>{{/if}} {
+    return this.readAll();
+  }
+
+  async getById(id{{#if (eq language "typescript")}}: string{{/if}}){{#if (eq language "typescript")}}: Promise<{{pascalCase}}Model | undefined>{{/if}} {
+    const all = await this.readAll();
+    return all.find((item) => item.id === id);
+  }
+
+  async create(data{{#if (eq language "typescript")}}: Create{{pascalCase}}Dto{{/if}}){{#if (eq language "typescript")}}: Promise<{{pascalCase}}Model>{{/if}} {
+    const all = await this.readAll();
+    const newItem{{#if (eq language "typescript")}}: {{pascalCase}}Model{{/if}} = {
+      ...data,
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+    };
+    await this.writeAll([...all, newItem]);
+    return newItem;
+  }
+
+  async update(id{{#if (eq language "typescript")}}: string{{/if}}, data{{#if (eq language "typescript")}}: Update{{pascalCase}}Dto{{/if}}){{#if (eq language "typescript")}}: Promise<{{pascalCase}}Model | undefined>{{/if}} {
+    const all = await this.readAll();
+    const index = all.findIndex((item) => item.id === id);
+    if (index === -1) return undefined;
+    all[index] = { ...all[index], ...data };
+    await this.writeAll(all);
+    return all[index];
+  }
+
+  async delete(id{{#if (eq language "typescript")}}: string{{/if}}){{#if (eq language "typescript")}}: Promise<boolean>{{/if}} {
+    const all = await this.readAll();
+    const filtered = all.filter((item) => item.id !== id);
+    if (filtered.length === all.length) return false;
+    await this.writeAll(filtered);
+    return true;
+  }
+}

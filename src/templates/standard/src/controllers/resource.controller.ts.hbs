@@ -1,0 +1,62 @@
+import { Request, Response, NextFunction } from 'express';
+import { {{pascalCase}}Store } from '../stores/{{singular}}.store.js';
+import { create{{pascalCase}}Schema, update{{pascalCase}}Schema } from '../schemas/{{singular}}.schema.js';
+import { ApiError } from '../errors/ApiError.js';
+import { HttpStatus } from '../errors/HttpStatus.js';
+
+export class {{pascalCase}}Controller {
+  constructor(private store: {{pascalCase}}Store) {}
+
+  getAll = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const data = await this.store.getAll();
+      res.status(HttpStatus.OK).json({ success: true, data });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const data = await this.store.getById(id);
+      if (!data) throw ApiError.notFound('{{pascalCase}} not found');
+      res.status(HttpStatus.OK).json({ success: true, data });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const body = create{{pascalCase}}Schema.parse(req.body);
+      const data = await this.store.create(body);
+      res.status(HttpStatus.CREATED).json({ success: true, data });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const body = update{{pascalCase}}Schema.parse(req.body);
+      const data = await this.store.update(id, body);
+      if (!data) throw ApiError.notFound('{{pascalCase}} not found');
+      res.status(HttpStatus.OK).json({ success: true, data });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  delete = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const deleted = await this.store.delete(id);
+      if (!deleted) throw ApiError.notFound('{{pascalCase}} not found');
+      res.status(HttpStatus.NO_CONTENT).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+}

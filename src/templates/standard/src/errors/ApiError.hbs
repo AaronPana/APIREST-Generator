@@ -1,0 +1,42 @@
+import { HttpStatus{{#if (eq language "typescript")}}, HttpStatusCode{{/if}} } from './HttpStatus.js';
+
+export class ApiError extends Error {
+  {{#if (eq language "typescript")}}
+  public readonly code: HttpStatusCode;
+
+  constructor(code: HttpStatusCode, message: string) {
+  {{else}}
+  constructor(code, message) {
+  {{/if}}
+    super(message);
+    this.code = code;
+  }
+
+  static badRequest(message{{#if (eq language "typescript")}}: string{{/if}}) {
+    return new ApiError(HttpStatus.BAD_REQUEST, message);
+  }
+
+  static unauthorized(message{{#if (eq language "typescript")}}: string{{/if}}) {
+    return new ApiError(HttpStatus.UNAUTHORIZED, message);
+  }
+
+  static forbidden(message{{#if (eq language "typescript")}}: string{{/if}}) {
+    return new ApiError(HttpStatus.FORBIDDEN, message);
+  }
+
+  static notFound(message{{#if (eq language "typescript")}}: string{{/if}}) {
+    return new ApiError(HttpStatus.NOT_FOUND, message);
+  }
+
+  static conflict(message{{#if (eq language "typescript")}}: string{{/if}}) {
+    return new ApiError(HttpStatus.CONFLICT, message);
+  }
+
+  static internal(message{{#if (eq language "typescript")}}: string{{/if}}) {
+    return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, message);
+  }
+
+  static serviceUnavailable(message{{#if (eq language "typescript")}}: string{{/if}}) {
+    return new ApiError(HttpStatus.SERVICE_UNAVAILABLE, message);
+  }
+}

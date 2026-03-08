@@ -15,12 +15,12 @@
   "scripts": {
     {{#if (eq language "typescript")}}
     "build": "tsc",
-    "dev": "tsx watch{{#if (ne level 'basic')}} --env-file=.env{{/if}} index.ts",
-    "start": "node{{#if (ne level 'basic')}} --env-file=.env{{/if}} dist/index.js",
+    "dev": "tsx watch{{#if (and (ne level 'basic') (ne level 'standard'))}} --env-file=.env{{/if}} src/index.ts",
+    "start": "node{{#if (and (ne level 'basic') (ne level 'standard'))}} --env-file=.env{{/if}} dist/index.js",
     "lint": "tsc --noEmit",
     {{else}}
-    "dev": "nodemon{{#if (ne level 'basic')}} --env-file=.env{{/if}} index.js",
-    "start": "node{{#if (ne level 'basic')}} --env-file=.env{{/if}} dist/index.js",
+    "dev": "nodemon{{#if (and (ne level 'basic') (ne level 'standard'))}} --env-file=.env{{/if}} src/index.js",
+    "start": "node{{#if (and (ne level 'basic') (ne level 'standard'))}} --env-file=.env{{/if}} src/index.js",
     {{/if}}
     {{#if prettier}}
     "format": "prettier --write \"src/**/*.{{#if (eq language 'typescript')}}ts{{else}}js{{/if}}\""

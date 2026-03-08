@@ -1,0 +1,18 @@
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../database/connection.js';
+
+export class {{pascalCase}} extends Model {}
+
+{{pascalCase}}.init(
+  {
+    // define your fields here, for example:
+    // name: { type: DataTypes.STRING, allowNull: false },
+    // email: { type: DataTypes.STRING, allowNull: false },
+  },
+  {
+    sequelize,
+    modelName: '{{pascalCase}}',
+    tableName: '{{plural}}',
+    timestamps: true,
+  }
+);

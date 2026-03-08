@@ -1,0 +1,83 @@
+import express, { Application, Request, Response } from 'express';
+{{#each resources}}
+import { {{pascalCase}}Router } from './routes/{{singular}}.router.js';
+{{/each}}
+import { corsMiddleware } from './middlewares/cors.js';
+import { loggerMiddleware } from './middlewares/logger.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { config } from './configs/app.config.js';
+{{#if (ne database "none")}}
+import { connectDatabase } from './database/connection.js';
+{{/if}}
+
+export class Server {
+  private PORT: number = config.port;
+  private app: Application;
+
+  constructor() {
+    this.app = express();
+    this.middlewares();
+    this.routes();
+    this.errorHandler();
+    this.start();
+  }
+
+  private middlewares(): void {
+    this.app.use(corsMiddleware);
+    this.app.use(loggerMiddleware);
+    this.app.use(express.json());
+  }
+
+  private routes(): void {
+    this.app.get('/api/ping', (_req: Request, res: Response) => {
+      res.status(200).json({ success: true, message: 'pong' });
+    });
+
+    this.app.get('/api/status', (_req: Request, res: Response) => {
+      res.status(200).json({ success: true, data: this.status() });
+    });
+
+    {{#each resources}}
+    this.app.use('/api/{{plural}}', {{pascalCase}}Router);
+    {{/each}}
+
+    this.app.use('*', (_req: Request, res: Response) => {
+      res.status(404).json({ success: false, message: 'Route not found' });
+    });
+  }
+
+  private errorHandler(): void {
+    this.app.use(errorHandler);
+  }
+
+  {{#if (ne database "none")}}
+  private async connectDB(): Promise<void> {
+    await connectDatabase();
+  }
+  {{/if}}
+
+  private start(): void {
+    {{#if (ne database "none")}}
+    this.connectDB().then(() => {
+      this.app.listen(this.PORT, () => {
+        console.log(`\nServer running on port ${this.PORT}`);
+        console.log(`http://localhost:${this.PORT}/api/ping`);
+      });
+    });
+    {{else}}
+    this.app.listen(this.PORT, () => {
+      console.log(`\nServer running on port ${this.PORT}`);
+      console.log(`http://localhost:${this.PORT}/api/ping`);
+    });
+    {{/if}}
+  }
+
+  status() {
+    return {
+      status: 'OK',
+      version: '{{version}}',
+      environment: config.env,
+      port: this.PORT,
+    };
+  }
+}

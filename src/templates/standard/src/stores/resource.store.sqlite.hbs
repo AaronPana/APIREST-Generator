@@ -1,0 +1,31 @@
+import { {{pascalCase}} } from '../models/{{singular}}.model.js';
+{{#if (eq language "typescript")}}
+import type { Create{{pascalCase}}Dto, Update{{pascalCase}}Dto } from '../schemas/{{singular}}.schema.js';
+{{/if}}
+
+export class {{pascalCase}}Store {
+  async getAll(){{#if (eq language "typescript")}}: Promise<{{pascalCase}}[]>{{/if}} {
+    return {{pascalCase}}.findAll();
+  }
+
+  async getById(id{{#if (eq language "typescript")}}: string{{/if}}){{#if (eq language "typescript")}}: Promise<{{pascalCase}} | null>{{/if}} {
+    return {{pascalCase}}.findByPk(Number(id));
+  }
+
+  async create(data{{#if (eq language "typescript")}}: Create{{pascalCase}}Dto{{/if}}){{#if (eq language "typescript")}}: Promise<{{pascalCase}}>{{/if}} {
+    return {{pascalCase}}.create(data);
+  }
+
+  async update(id{{#if (eq language "typescript")}}: string{{/if}}, data{{#if (eq language "typescript")}}: Update{{pascalCase}}Dto{{/if}}){{#if (eq language "typescript")}}: Promise<{{pascalCase}} | null>{{/if}} {
+    const instance = await {{pascalCase}}.findByPk(Number(id));
+    if (!instance) return null;
+    return instance.update(data);
+  }
+
+  async delete(id{{#if (eq language "typescript")}}: string{{/if}}){{#if (eq language "typescript")}}: Promise<boolean>{{/if}} {
+    const instance = await {{pascalCase}}.findByPk(Number(id));
+    if (!instance) return false;
+    await instance.destroy();
+    return true;
+  }
+}

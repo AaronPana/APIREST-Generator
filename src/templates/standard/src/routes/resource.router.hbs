@@ -1,0 +1,24 @@
+import { Router } from 'express';
+import { {{pascalCase}}Controller } from '../controllers/{{singular}}.controller.js';
+import { {{pascalCase}}Store } from '../stores/{{singular}}.store.js';
+
+const router = Router();
+const store = new {{pascalCase}}Store();
+const controller = new {{pascalCase}}Controller(store);
+
+// GET /api/{{plural}}
+router.get('/', controller.getAll);
+
+// GET /api/{{plural}}/:id
+router.get('/:id', controller.getById);
+
+// POST /api/{{plural}}
+router.post('/', controller.create);
+
+// PUT /api/{{plural}}/:id
+router.put('/:id', controller.update);
+
+// DELETE /api/{{plural}}/:id
+router.delete('/:id', controller.delete);
+
+export const {{pascalCase}}Router = router;

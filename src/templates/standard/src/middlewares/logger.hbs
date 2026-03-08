@@ -1,0 +1,18 @@
+{{#if (eq language "typescript")}}
+import { Request, Response, NextFunction } from 'express';
+{{/if}}
+
+export const loggerMiddleware = (
+  req{{#if (eq language "typescript")}}: Request{{/if}},
+  res{{#if (eq language "typescript")}}: Response{{/if}},
+  next{{#if (eq language "typescript")}}: NextFunction{{/if}}
+) => {
+  const start = Date.now();
+
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} ${res.statusCode} ${duration}ms`);
+  });
+
+  next();
+};
