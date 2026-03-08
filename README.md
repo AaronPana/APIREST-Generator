@@ -434,10 +434,15 @@ src/
 | `chalk`             | Colored console output                              |
 | `fs-extra`          | File system operations                              |
 | `handlebars`        | Template engine for code generation                 |
-| `zod`               | Schema validation                                   |
 | `pluralize`         | Pluralization and singularization of resource names |
+| `zod`               | Schema validation                                   |
 | `typescript`        | TypeScript compiler                                 |
 | `tsx`               | Run TypeScript directly in development              |
+| `eslint`            | Linting engine                                      |
+| `@eslint/js`        | ESLint recommended rules for JavaScript             |
+| `typescript-eslint` | TypeScript-specific ESLint rules                    |
+| `globals`           | Global variable definitions for ESLint environments |
+| `prettier`          | Code formatting                                     |
 
 ---
 
