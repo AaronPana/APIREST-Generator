@@ -285,10 +285,13 @@ my-api/
 
 ```bash
 npm run dev      # Run with hot reload
+npm run format   # Format with Prettier (if enabled)
+npm run lint     # Type check (TypeScript only)
+npm run lint:eslint  # Lint with ESLint (if enabled)
+npm run lint:fix     # Auto-fix ESLint issues (if enabled)
 npm run build    # Compile to dist/ (TypeScript only)
 npm run start    # Run compiled output
-npm run lint     # Type check (TypeScript only)
-npm run format   # Format with Prettier (if selected)
+npm run test     # Run tests
 ```
 
 **What to modify:**
