@@ -1,5 +1,5 @@
 import { existsSync, realpathSync } from 'fs';
-import { resolve, basename, normalize } from 'path';
+import { basename, normalize } from 'path';
 
 export function validateProjectPath(input: string): true | string {
   // true | string para Inquirer
