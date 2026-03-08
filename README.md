@@ -131,19 +131,20 @@ Assigned automatically based on the selected database:
 | MongoDB    | Mongoose _(coming soon)_  |
 | SQL Server | Sequelize _(coming soon)_ |
 
-### Prettier
+### ESLint + Prettier
 
-Adds a `.prettierrc` with standard configuration and a `format` script. Config applied:
+Adds ESLint and Prettier to the project with a pre-configured setup.
 
-```json
-{
-  "semi": true,
-  "singleQuote": true,
-  "tabWidth": 2,
-  "printWidth": 120,
-  "arrowParens": "always"
-}
-```
+- `eslint.config.js` — ESLint flat config (v9) with recommended rules
+- `prettier.config.js` — Prettier config with standard formatting rules
+
+Scripts added when enabled:
+
+| Script        | Description                       |
+| ------------- | --------------------------------- |
+| `lint:eslint` | Run ESLint on `src/`              |
+| `lint:fix`    | Run ESLint and auto-fix issues    |
+| `format`      | Format source files with Prettier |
 
 ### Resources
 
@@ -201,10 +202,13 @@ my-api/
 
 ```bash
 npm run dev      # Run with hot reload
+npm run format   # Format with Prettier (if enabled)
+npm run lint     # Type check (TypeScript only)
+npm run lint:eslint  # Lint with ESLint (if enabled)
+npm run lint:fix     # Auto-fix ESLint issues (if enabled)
 npm run build    # Compile to dist/ (TypeScript only)
 npm run start    # Run compiled output
-npm run lint     # Type check (TypeScript only)
-npm run format   # Format with Prettier (if selected)
+npm run test     # Run tests
 ```
 
 **What to modify:**
@@ -373,7 +377,7 @@ User.init(
     name: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, allowNull: false },
   },
-  { sequelize, modelName: 'User', tableName: 'users', timestamps: true }
+  { sequelize, modelName: 'User', tableName: 'users', timestamps: true },
 );
 ```
 
@@ -454,6 +458,7 @@ npm run format   # Format source files with Prettier
 - [x] Basic level — entry point, Server class, resource routers
 - [x] Standard level — controllers, models, stores, middlewares, error handling
 - [x] Standard + SQLite — Sequelize integration
+- [x] ESLint + Prettier integration
 - [ ] Advanced level — services, repositories, Pino logs, config by env
 - [ ] Complete level — auth JWT, roles and permissions structure
 - [ ] Docker support
