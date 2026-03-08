@@ -1,0 +1,60 @@
+import js from '@eslint/js';
+import globals from 'globals';
+
+export default [
+  // ── BASE ──────────────────────────────────────────────────────────────
+  js.configs.recommended,
+  // Reglas recomendadas de ESLint — detecta errores comunes de JS.
+
+  {
+    // ── ENVIRONMENT ─────────────────────────────────────────────────────
+    languageOptions: {
+      globals: globals.node,
+      // Variables globales de Node.js (process, __dirname, etc).
+      ecmaVersion: 2022,
+      // Versión de ECMAScript a usar. 2022 habilita top-level await, etc.
+      sourceType: 'module',
+      // Indica que el código usa ESM (import/export).
+    },
+
+    // ── RULES ────────────────────────────────────────────────────────────
+    rules: {
+
+      'no-console': 'off',
+      // Permite usar console.log, console.error, etc.
+
+      'no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        // Parámetros que empiezan con _ no dan error (_req, _next, etc).
+        varsIgnorePattern: '^_',
+        // Lo mismo para variables locales.
+      }],
+      // Error si declarás una variable o parámetro y no lo usás.
+
+      'eqeqeq': ['error', 'always'],
+      // Obliga el uso de === y !== en lugar de == y !=.
+
+      // 'no-implicit-coercion': 'error',
+      // Prohíbe conversiones de tipo implícitas como !!value o +str.
+
+      // 'no-shadow': 'error',
+      // Error si una variable interna tiene el mismo nombre que una externa.
+
+      // 'consistent-return': 'error',
+      // Obliga a que todas las ramas de una función retornen valor o ninguna lo haga.
+      // Equivalente a noImplicitReturns de TypeScript.
+
+      // 'no-param-reassign': 'error',
+      // Prohíbe reasignar parámetros de funciones.
+      // Útil para evitar mutaciones accidentales pero puede ser molesto con Express (req, res).
+
+    },
+  },
+
+  // ── IGNORED FILES ──────────────────────────────────────────────────────
+  {
+    ignores: [
+      'node_modules/',
+    ],
+  },
+];

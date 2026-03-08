@@ -3,31 +3,34 @@
   "version": "0.1.0",
   "description": "{{description}}",
   {{#if (eq language "typescript")}}
-    "main": "dist/index.js",
+  "main": "dist/index.js",
   {{else}}
-    "main": "index.js",
+  "main": "index.js",
   {{/if}}
   {{#if (eq language "typescript")}}
-    "bin": {
-      "{{name}}": "./dist/index.js"
-    },
+  "bin": {
+    "{{name}}": "./dist/index.js"
+  },
   {{/if}}
   "scripts": {
     {{#if (eq language "typescript")}}
-    "build": "tsc",
     "dev": "tsx watch{{#if (and (ne level 'basic') (ne level 'standard'))}} --env-file=.env{{/if}} src/index.ts",
-    "start": "node{{#if (and (ne level 'basic') (ne level 'standard'))}} --env-file=.env{{/if}} dist/index.js",
     "lint": "tsc --noEmit",
+    "build": "tsc",
+    "start": "node{{#if (and (ne level 'basic') (ne level 'standard'))}} --env-file=.env{{/if}} dist/index.js",
     {{else}}
     "dev": "nodemon{{#if (and (ne level 'basic') (ne level 'standard'))}} --env-file=.env{{/if}} src/index.js",
     "start": "node{{#if (and (ne level 'basic') (ne level 'standard'))}} --env-file=.env{{/if}} src/index.js",
     {{/if}}
-    {{#if prettier}}
-    "format": "prettier --write \"src/**/*.{{#if (eq language 'typescript')}}ts{{else}}js{{/if}}\""
+    {{#if linting}}
+    "format": "prettier --write \"src/**/*.{{#if (eq language 'typescript')}}ts{{else}}js{{/if}}\"",
+    "lint:eslint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
     {{/if}}
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
     {{#each dependencies}}

@@ -1,0 +1,76 @@
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import globals from 'globals';
+
+export default tseslint.config(
+  // ── BASE ──────────────────────────────────────────────────────────────
+  js.configs.recommended,
+  // Reglas recomendadas de ESLint puro.
+
+  ...tseslint.configs.recommended,
+  // Reglas recomendadas de typescript-eslint.
+
+  {
+    // ── ENVIRONMENT ─────────────────────────────────────────────────────
+    languageOptions: {
+      globals: globals.node,
+      // Variables globales de Node.js (process, __dirname, etc).
+      parserOptions: {
+        project: './tsconfig.json', // ← acá, le dice dónde está el tsconfig
+      },
+    },
+
+    // ── RULES ────────────────────────────────────────────────────────────
+    rules: {
+
+      // ── JAVASCRIPT ────────────────────────────────────────────────────
+
+      'no-console': 'off',
+      // Permite usar console.log, console.error, etc.
+
+      'no-unused-vars': 'off',
+      // Desactivamos la regla base — usamos la de TypeScript en su lugar.
+
+      'eqeqeq': ['error', 'always'],
+      // Obliga el uso de === y !== en lugar de == y !=.
+
+      // 'no-implicit-coercion': 'error',
+      // Prohíbe conversiones de tipo implícitas como !!value o +str.
+
+      // 'no-shadow': 'error',
+      // Error si una variable interna tiene el mismo nombre que una externa.
+
+      // ── TYPESCRIPT ────────────────────────────────────────────────────
+
+      '@typescript-eslint/no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        // Parámetros que empiezan con _ no dan error (_req, _next, etc).
+        varsIgnorePattern: '^_',
+        // Lo mismo para variables locales.
+      }],
+
+      '@typescript-eslint/no-explicit-any': 'warn',
+      // Advertencia cuando usás el tipo any explícitamente.
+
+      // '@typescript-eslint/explicit-function-return-type': 'warn',
+      // Obliga a declarar el tipo de retorno en todas las funciones.
+
+      // '@typescript-eslint/explicit-module-boundary-types': 'warn',
+      // Obliga a tipar parámetros y retorno de funciones exportadas.
+
+      '@typescript-eslint/no-floating-promises': 'error',
+      // Error si llamás a una función async sin await o .catch().
+
+      '@typescript-eslint/no-misused-promises': 'error',
+      // Error si pasás una promise donde no se espera una (como en if o callbacks).
+    },
+  },
+
+  // ── IGNORED FILES ──────────────────────────────────────────────────────
+  {
+    ignores: [
+      'dist/',
+      'node_modules/',
+    ],
+  },
+);

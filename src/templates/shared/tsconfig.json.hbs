@@ -1,19 +1,77 @@
 {
   "compilerOptions": {
+
+    /* ── LANGUAGE & TARGET ──────────────────────────────────────────────── */
+
     "target": "ES2022",
+    // Versión de JavaScript a la que compila.
+    // ES2022 es ideal para Node 20+ — soporta clases privadas, top-level await, etc.
+
+    /* ── MODULES ────────────────────────────────────────────────────────── */
+
     "module": "NodeNext",
+    // Sistema de módulos. NodeNext habilita ESM (import/export) en Node.
+    // Necesario si usás "type": "module" en package.json.
+
     "moduleResolution": "NodeNext",
-    "rootDir": "src",
-    "outDir": "dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    // Cómo TypeScript resuelve los imports.
+    // Requiere extensiones explícitas en los imports (.js).
+
     "resolveJsonModule": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
+    // Permite importar archivos .json directamente.
+
+    /* ── INPUT / OUTPUT ─────────────────────────────────────────────────── */
+
+    "rootDir": "src",
+    // Carpeta raíz del código fuente.
+
+    "outDir": "dist",
+    // Carpeta donde se guarda el código compilado.
+
+    "sourceMap": true,
+    // Genera sourcemaps para que debuggers apunten al .ts original.
+
+    /* ── STRICT TYPE CHECKING ───────────────────────────────────────────── */
+
+    "strict": true,
+    // Activa TODAS las opciones estrictas de TypeScript de una vez.
+
+    "noUnusedLocals": true,
+    // Error si declarás una variable local y no la usás.
+    // Desactivar si querés menos restricciones durante desarrollo.
+
+    "noUnusedParameters": true,
+    // Error si declarás un parámetro de función y no lo usás.
+    // Convención: prefijá con _ los que ignorás a propósito (_req, _next).
+
+    // "noImplicitReturns": true,
+    // Error si una función puede retornar sin un return explícito.
+    // Recomendado para código más predecible.
+
+    // "noFallthroughCasesInSwitch": true,
+    // Error si un case en un switch no tiene break o return.
+    // Evita bugs clásicos de fallthrough accidental.
+
+    // "noUncheckedIndexedAccess": true,
+    // Agrega undefined al tipo cuando accedés a un array por índice.
+    // Muy estricto — puede romper mucho código existente.
+
+    /* ── INTEROP ────────────────────────────────────────────────────────── */
+
+    "esModuleInterop": true,
+    // Permite importar módulos CommonJS con default import.
+    // import express from 'express' en lugar de import * as express.
+
+    "forceConsistentCasingInFileNames": true,
+    // Error si importás un archivo con casing diferente al nombre real.
+
+    /* ── PERFORMANCE ────────────────────────────────────────────────────── */
+
+    "skipLibCheck": true
+    // Omite el chequeo de tipos en node_modules. Mejora la velocidad de compilación.
+
   },
+
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
