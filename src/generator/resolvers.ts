@@ -44,8 +44,11 @@ export function resolveFiles(answers: ProjectAnswers): FileToWrite[] {
     files.push(shared(sharedPath, projectPath, 'tsconfig.json.hbs', 'tsconfig.json', context));
   }
 
-  if (answers.prettier) {
-    files.push(shared(sharedPath, projectPath, '.prettierrc.hbs', '.prettierrc', context));
+  if (answers.linting) {
+    files.push(
+      shared(sharedPath, projectPath, 'prettier.config.js.hbs', 'prettier.config.js', context),
+      shared(sharedPath, projectPath, `eslint.config.${ext}.hbs`, 'eslint.config.js', context)
+    );
   }
 
   if (answers.level === 'complete') {

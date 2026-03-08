@@ -40,7 +40,7 @@ export interface ProjectAnswers {
   description: string;
   level: Level;
   language: Language;
-  prettier: boolean;
+  linting: boolean;
   database: Database;
   orm: ORM;
   resources: string[];

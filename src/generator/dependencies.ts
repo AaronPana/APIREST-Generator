@@ -2,14 +2,14 @@ export function resolveDeps(answers: {
   level: string;
   database: string;
   language: string;
-  prettier: boolean;
+  linting: boolean;
 }): DepsBlock {
   const blocks: DepsBlock[] = [
     sharedDeps,
     levelDeps[answers.level],
     dbDeps[answers.database],
     ...(answers.language === 'typescript' ? [tsDeps] : [jsDeps]),
-    ...(answers.prettier ? [prettierDeps] : []),
+    ...(answers.linting ? [lintingDeps[answers.language]] : []),
   ];
 
   return blocks.reduce(
@@ -108,9 +108,24 @@ export const tsDeps: DepsBlock = {
   },
 };
 
-export const prettierDeps: DepsBlock = {
-  dependencies: {},
-  devDependencies: {
-    prettier: '^3.3.0',
+export const lintingDeps: Record<string, DepsBlock> = {
+  typescript: {
+    dependencies: {},
+    devDependencies: {
+      eslint: '^9.0.0',
+      '@eslint/js': '^9.0.0',
+      'typescript-eslint': '^8.0.0',
+      globals: '^15.0.0',
+      prettier: '^3.3.0',
+    },
+  },
+  javascript: {
+    dependencies: {},
+    devDependencies: {
+      eslint: '^9.0.0',
+      '@eslint/js': '^9.0.0',
+      globals: '^15.0.0',
+      prettier: '^3.3.0',
+    },
   },
 };

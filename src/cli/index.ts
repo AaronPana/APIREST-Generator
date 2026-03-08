@@ -4,14 +4,14 @@ import { askName } from './questions/name.js';
 import { askDescription } from './questions/description.js';
 import { askLanguage } from './questions/language.js';
 import { askLevel } from './questions/level.js';
-import { askPrettier } from './questions/prettier.js';
+import { askLinting } from './questions/linting.js';
 import { askDatabase } from './questions/database.js';
 import { askOrm } from './questions/orm.js';
 import { askAuth } from './questions/auth.js';
 import { askResources } from './questions/resources.js';
 import { askPort } from './questions/port.js';
 import { askGit } from './questions/git.js';
-import { askDocker } from './questions/docker.js';
+// import { askDocker } from './questions/docker.js';
 import type { ProjectAnswers } from './types.js';
 import { generate } from '../generator/index.js';
 import path from 'path';
@@ -35,7 +35,7 @@ export async function run(): Promise<void> {
   const database = await askDatabase(level);
   const orm = await askOrm(level, database);
   const language = await askLanguage();
-  const prettier = await askPrettier();
+  const linting = await askLinting();
   const resources = await askResources();
   const auth = await askAuth(level);
   const port = await askPort();
@@ -50,7 +50,7 @@ export async function run(): Promise<void> {
     database,
     orm,
     language,
-    prettier,
+    linting,
     resources,
     auth,
     port,
@@ -71,7 +71,7 @@ function printSummary(answers: ProjectAnswers): void {
   logger.info(`Base de datos: ${answers.database === 'none' ? 'Ninguna' : capitalize(answers.database)}`);
   if (answers.database !== 'none') logger.info(`ORM:           ${capitalize(answers.orm)}`);
   logger.info(`Lenguaje:      ${capitalize(answers.language)}`);
-  logger.info(`Prettier:      ${answers.prettier ? 'Sí' : 'No'}`);
+  logger.info(`Linting:       ${answers.linting ? 'Sí' : 'No'}`);
   // logger.info(`Auth:          ${answers.auth === 'none' ? 'Ninguna' : answers.auth.toUpperCase()}`);
   logger.info('Auth:          coming soon');
   logger.info(`Recursos:      ${answers.resources.join(', ')}`);
